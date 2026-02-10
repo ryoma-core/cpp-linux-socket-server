@@ -28,7 +28,8 @@
 
 ```bash
 git clone https://github.com/ryoma-core/cpp-linux-socket-server
-cd cpp-linux-socket-server
+cd cpp-linux-socket-server/Socket
 
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j
+```
