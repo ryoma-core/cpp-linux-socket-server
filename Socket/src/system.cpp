@@ -102,12 +102,9 @@ double Memory_Resource::getMemoryUsage()
 
 Disk_Resource::Disk_Resource()
 {
-    // Constructor
+       // Constructor
     if (statvfs("/", &st_root) != 0) {
         std::cerr << "[Disk_Resource] Failed to get / disk info using statvfs\n";
-    }
-    if (statvfs("/boot", &st_boot) != 0) {
-        std::cerr << "[Disk_Resource] Failed to get /boot disk info using statvfs\n";
     }
 }
 
@@ -118,7 +115,7 @@ Disk_Resource::~Disk_Resource()
 
 double Disk_Resource::getDiskUsage()
 {
-    if(st_root.f_frsize == 0 || st_boot.f_frsize == 0) {
+    if(st_root.f_frsize == 0) {
         std::cerr << "[Disk_Resource] Filesystem block size is zero, cannot calculate usage.\n";
         return 0.0;
     }
@@ -127,18 +124,11 @@ double Disk_Resource::getDiskUsage()
     disk_root_info.used = (st_root.f_blocks - st_root.f_bfree) * st_root.f_frsize;
     disk_root_info.avail = st_root.f_bavail * st_root.f_frsize;
 
-    // Boot 디스크 정보 계산
-    disk_boot_info.used = (st_boot.f_blocks - st_boot.f_bfree) * st_boot.f_frsize;
-    disk_boot_info.avail = st_boot.f_bavail * st_boot.f_frsize;
-
-    long long total_used = disk_root_info.used + disk_boot_info.used;
-    long long total_avail = disk_root_info.avail + disk_boot_info.avail;
-
-    long long total = total_used + total_avail;
+    long long total = disk_root_info.used + disk_root_info.avail;
     if (total == 0) {
         std::cerr << "[Disk_Resource] Total disk size is zero, cannot calculate usage.\n";
         return 0.0;
     }
 
-    return (static_cast<double>(total_used) / static_cast<double>(total)) * 100.0;
+    return (static_cast<double>(disk_root_info.used) / static_cast<double>(total)) * 100.0;
 }

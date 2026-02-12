@@ -57,7 +57,5 @@ class Disk_Resource {
         double getDiskUsage();
     private:
         struct statvfs st_root{};
-        struct statvfs st_boot{};
         DiskInfo disk_root_info;
-        DiskInfo disk_boot_info;
 };

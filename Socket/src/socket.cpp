@@ -8,6 +8,7 @@ Server_Socket::Server_Socket(uint16_t port)
 Server_Socket::~Server_Socket()
 {
     // Destructor
+    stop();
 }
 
 void Server_Socket::start()
